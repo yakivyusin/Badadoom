@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using CannedBytes.Midi.IO;
-using CannedBytes.Midi.Message;
+using Badadoom.MidiLibrary;
+using Badaddom.MidiLibrary.IO;
 
 namespace BF_to_Badadoom
 {
@@ -13,9 +13,6 @@ namespace BF_to_Badadoom
         {
             string bfFileName = null;
             string midiFileName = null;
-            List<string> sourceList = new List<string>();
-            List<MidiFileEvent> notes = new List<MidiFileEvent>();
-            Random rnd = new Random();
 
             if (args.Length > 1)
             {
@@ -28,84 +25,68 @@ namespace BF_to_Badadoom
                 return;
             }
 
-            using (StreamReader sr = new StreamReader(bfFileName))
-            {
-                while (!sr.EndOfStream)
-                {
-                    sourceList.Add(sr.ReadLine());
-                }
-            }
-
-            foreach (string line in sourceList)
-            {
-                string rafined = deleteRandomChars(line);
-                foreach (char i in rafined)
-                {
-                    MidiFileEvent note = new MidiFileEvent();
-
-                    if (notes.Count > 0)
-                    {
-                        note.DeltaTime = rnd.Next(10, 30);
-                        note.AbsoluteTime = notes.Last().AbsoluteTime + note.DeltaTime;
-                    }
-                    else
-                    {
-                        note.AbsoluteTime = 0;
-                        note.DeltaTime = 0;
-                    }
-
-                    switch (i)
-                    {
-                        case ']':
-                            {
-                                note.Message = new MidiChannelMessage(5584025);
-                                break;
-                            }
-                        case '[':
-                            {
-                                note.Message = new MidiChannelMessage(5714329);
-                                break;
-                            }
-                        case ',':
-                            {
-                                note.Message = new MidiChannelMessage(4143001);
-                                break;
-                            }
-                        case '>':
-                            {
-                                note.Message = new MidiChannelMessage(7284889);
-                                break;
-                            }
-                        case '<':
-                            {
-                                note.Message = new MidiChannelMessage(3615641);
-                                break;
-                            }
-                        case '-':
-                            {
-                                note.Message = new MidiChannelMessage(2569113);
-                                break;
-                            }
-                        case '+':
-                            {
-                                note.Message = new MidiChannelMessage(8332185);
-                                break;
-                            }
-                        case '.':
-                            {
-                                note.Message = new MidiChannelMessage(6565017);
-                                break;
-                            }
-                    }
-
-                    notes.Add(note);
-                }
-            }
-
+            var notes = Translate(File.ReadAllLines(bfFileName).ToList());
             SaveEventsToFile(notes, midiFileName);
         }
 
-        private static void SaveEventsToFile(IEnumerable<MidiFileEvent> notes, string filePath)
+        private static List<MidiNote> Translate(List<string> fileContent)
+        {
+            List<MidiNote> notes = new List<MidiNote>();
+            foreach (string line in fileContent)
+            {
+                foreach (char i in DeleteRandomChars(line))
+                {
+                    notes.Add(Translate(i, notes.LastOrDefault()?.AbsoluteTime ?? 0));
+                }
+            }
+            return notes;
+        }
+
+        private static MidiNote Translate(char symbol, long shift)
+        {
+            Random rnd = new Random();
+            int deltaTime = rnd.Next(10, 30);
+            long absoluteTime = shift + deltaTime;
+
+            switch (symbol)
+            {
+                case ']':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 5584025);
+                    }
+                case '[':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 5714329);
+                    }
+                case ',':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 4143001);
+                    }
+                case '>':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 7284889);
+                    }
+                case '<':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 3615641);
+                    }
+                case '-':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 2569113);
+                    }
+                case '+':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 8332185);
+                    }
+                case '.':
+                    {
+                        return new MidiNote(deltaTime, absoluteTime, 6565017);
+                    }
+            }
+            return null;
+        }
+
+        private static void SaveEventsToFile(IEnumerable<MidiNote> notes, string filePath)
         {
             if (notes != null &&
                 notes.Count() > 0)
@@ -120,7 +101,7 @@ namespace BF_to_Badadoom
             }
         }
 
-        private static string deleteRandomChars(string str)
+        private static string DeleteRandomChars(string str)
         {
             var allowedChars = "][.,><+-";
             return new string(str.Where(c => allowedChars.Contains(c)).ToArray());

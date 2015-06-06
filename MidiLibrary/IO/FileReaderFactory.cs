@@ -4,7 +4,7 @@ using CannedBytes.Media.IO.Services;
 using CannedBytes.Midi.IO;
 using System.ComponentModel.Composition.Hosting;
 
-namespace Badadoom
+namespace Badadoom.MidiLibrary.IO
 {
     internal class FileReaderFactory
     {
@@ -17,7 +17,7 @@ namespace Badadoom
             return reader;
         }
 
-        public static ChunkFileContext CreateFileContextForReading(string filePath)
+        private static ChunkFileContext CreateFileContextForReading(string filePath)
         {
             var context = new ChunkFileContext();
             context.ChunkFile = ChunkFileInfo.OpenRead(filePath);
@@ -27,16 +27,14 @@ namespace Badadoom
             return context;
         }
 
-        public static CompositionContainer CreateCompositionContextForReading()
+        private static CompositionContainer CreateCompositionContextForReading()
         {
             var factory = new CompositionContainerFactory();
 
             factory.AddMarkedTypesInAssembly(null, typeof(IFileChunkHandler));
-            // add midi exports
+            
             factory.AddMarkedTypesInAssembly(typeof(MTrkChunkHandler).Assembly, typeof(IFileChunkHandler));
-
-            // note that Midi files use big endian.
-            // and the chunks are not aligned.
+            
             factory.AddTypes(
                 typeof(BigEndianNumberReader),
                 typeof(SizePrefixedStringReader),
@@ -46,7 +44,7 @@ namespace Badadoom
             var container = factory.CreateNew();
 
             var chunkFactory = container.GetService<ChunkTypeFactory>();
-            // add midi chunks
+            
             chunkFactory.AddChunksFrom(typeof(MTrkChunkHandler).Assembly, true);
 
             return container;

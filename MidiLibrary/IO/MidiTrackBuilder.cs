@@ -3,9 +3,9 @@ using CannedBytes.Midi.Message;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BF_to_Badadoom
+namespace Badaddom.MidiLibrary.IO
 {
-    class MidiTrackBuilder
+    internal class MidiTrackBuilder
     {
         private IEnumerable<MidiFileEvent> events;
 

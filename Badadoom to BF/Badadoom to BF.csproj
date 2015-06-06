@@ -32,33 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CannedBytes">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes\CannedBytes.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.IO">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes\CannedBytes.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Media">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes\CannedBytes.Media.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Media.IO">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes\CannedBytes.Media.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Midi">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes.Midi.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Midi.Components">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes.Midi.Components.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Midi.IO">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes.Midi.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Midi.Message">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes.Midi.Message.dll</HintPath>
-    </Reference>
-    <Reference Include="CannedBytes.Midi.Xml">
-      <HintPath>..\..\..\..\Downloads\midinet-106781\_SharedAssemblies\CannedBytes.Midi.Xml.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -69,13 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileReadedFactory.cs" />
-    <Compile Include="MidiFileData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MidiLibrary\MidiLibrary.csproj">
+      <Project>{eaa1d022-e91e-4cd5-b47e-1e738b720503}</Project>
+      <Name>MidiLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

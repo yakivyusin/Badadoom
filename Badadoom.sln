@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Badadoom", "Badadoom\Badadoom.csproj", "{14E17F92-71CD-4793-AAD9-2B47712AC539}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF to Badadoom", "BF to Badadoom\BF to Badadoom.csproj", "{4C50E1BF-80DC-472A-A518-CE6FA37D1359}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Badadoom to BF", "Badadoom to BF\Badadoom to BF.csproj", "{1926C0A6-276D-45F1-8B00-9B2427A3B4D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiLibrary", "MidiLibrary\MidiLibrary.csproj", "{EAA1D022-E91E-4CD5-B47E-1E738B720503}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +29,10 @@ Global
 		{1926C0A6-276D-45F1-8B00-9B2427A3B4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1926C0A6-276D-45F1-8B00-9B2427A3B4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1926C0A6-276D-45F1-8B00-9B2427A3B4D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA1D022-E91E-4CD5-B47E-1E738B720503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA1D022-E91E-4CD5-B47E-1E738B720503}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA1D022-E91E-4CD5-B47E-1E738B720503}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA1D022-E91E-4CD5-B47E-1E738B720503}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,15 +1,16 @@
-﻿using CannedBytes;
-using CannedBytes.Media.IO;
+﻿using CannedBytes.Media.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.Composition.Hosting;
 using CannedBytes.ComponentModel.Composition;
 using CannedBytes.Midi.IO;
 using CannedBytes.Media.IO.Services;
+using Badadoom.MidiLibrary;
+using System;
 
-namespace BF_to_Badadoom
+namespace Badaddom.MidiLibrary.IO
 {
-    class MidiFileSerializer : DisposableBase
+    public class MidiFileSerializer : IDisposable
     {
         private ChunkFileContext context = new ChunkFileContext();
 
@@ -17,6 +18,11 @@ namespace BF_to_Badadoom
         {
             this.context.ChunkFile = ChunkFileInfo.OpenWrite(filePath);
             this.context.CompositionContainer = CreateCompositionContainer();
+        }
+
+        public void Serialize(IEnumerable<MidiNote> events)
+        {
+            Serialize(events.Select(x => x.InnerEvent));
         }
 
         private CompositionContainer CreateCompositionContainer()
@@ -48,7 +54,7 @@ namespace BF_to_Badadoom
             return container;
         }
 
-        public void Serialize(IEnumerable<MidiFileEvent> events)
+        private void Serialize(IEnumerable<MidiFileEvent> events)
         {
             var builder = new MidiTrackBuilder(events);
             builder.BuildTracks();
@@ -69,9 +75,9 @@ namespace BF_to_Badadoom
             }
         }
 
-        protected override void Dispose(DisposeObjectKind disposeKind)
+        public void Dispose()
         {
-            this.context.Dispose();
+            context.Dispose();
         }
     }
 }
