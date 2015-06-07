@@ -1,39 +1,40 @@
-# Badadoom - еще один эзотерический язык
+# Badadoom: Yet another esoteric programming language
 
-#### Введение ####
-##### Общие сведения #####
+#### Intro ####
+##### Basics #####
 
-**Badadoom** – диалект эзотерического языка Brainfuck, который в качестве исходных кодов использует звуковые файлы MIDI.
+**Badadoom** – dialect of the Brainfuck esoteric language, which uses MIDI files as source codes.
 
-##### Области применения #####
+##### Application Area #####
 
-Диалект, как и оригинальный Brainfuck, теоретически является Тьюринг-полным (при условии бесконечного набора ячеек у интерпретатора).
-Возможные области применения диалекта:
+The Badadoom, like the original Brainfuck, is theoretically Turing-complete (assuming an infinite set of cells for the interpreter).
 
- - стеганография – благодаря архитектуре (см. далее) исходный код
-   программы может быть включен в обычный звуковой файл .mid без
-   возможности услышать изменения при прослушивании;
+Possible application areas:
+
+ - steganography - the source code of the program can be included in a regular .mid audio file without the possibility to hear changes while listening
  - just for lulz
 
-#### Синтаксис ####
-##### Набор команд и соответствия формату MIDI #####
+#### Syntax ####
+##### Command Set #####
 
-Код программы в файле .mid размещается на десятом (в случае начала нумерации с единицы) канале, который согласно стандарту MIDI зарезервирован за ударными (откуда походит и название дилаекта).
-В качестве команды в диалекте используется событие начала ноты из стандарта MID (далее – NoteOn). 
-Из набора ударных, которые поддерживает стандарт General MIDI, для команд были выделены следующие:
+The code of the program in the .mid file is placed on the tenth (in the case of the beginning of the numbering from 1) channel, which is reserved by the MIDI standard for the percussion (hence the name of the dialect).
 
-| Ударные           | Описание команды                                                                                                                                       |
+As a command the dialect uses the note start event from the MIDI file (hereinafter - NoteOn).
+
+From the  percussion instruments, defined by General MIDI standard, the following commands were selected for the commands:
+
+| Percussion           | Description                                                                                                                                       |
 |-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 40 Snare Drum 2   | перейти к следующей ячейке                                                                                                                             |
-| 43 Low Tom 1      | перейти к предыдущей ячейке                                                                                                                            |
-| 35 Bass Drum 2    | увеличить значение в текущей ячейке на 1                                                                                                               |
-| 51 Ride Cymbal 1  | уменьшить значение в текущей ячейке на 1                                                                                                               |
-| 44 Pedal Hi-hat   | напечатать значение из текущей ячейки                                                                                                                  |
-| 55 Splash Cymbal  | ввести извне значение и сохранить в текущей ячейке                                                                                                     |
-| 49 Crash Cymbal 1 | если значение текущей ячейки ноль, перейти вперёд по тексту программы на ячейку, следующую за соответствующей 52 Chinese Cymbal (с учётом вложенности) |
-| 52 Chinese Cymbal | если значение текущей ячейки не нуль, перейти назад по тексту программы на символ 49 Crash Cymbal 1 (с учётом вложенности)                             |
+| 40 Snare Drum 2   | increment the data pointer (to point to the next cell to the right)  .                                                                                                                           |
+| 43 Low Tom 1      | decrement the data pointer (to point to the next cell to the left).                                                                                                                            |
+| 35 Bass Drum 2    | increment (increase by one) the byte at the data pointer.|
+| 51 Ride Cymbal 1  | decrement (decrease by one) the byte at the data pointer.                                                                                                               |
+| 44 Pedal Hi-hat   | output the byte at the data pointer.                                                                                                                  |
+| 55 Splash Cymbal  | accept one byte of input, storing its value in the byte at the data pointer.                                                                                                     |
+| 49 Crash Cymbal 1 | if the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching '52 Chinese Cymbal' command. |
+| 52 Chinese Cymbal | if the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching '49 Crash Cymbal 1' command.                             |
 
-##### Таблица соответствия команд Badadoom и Brainfuck #####
+##### Commands Match Table for Badadoom & Brainfuck #####
 
 | Badadoom          | Brainfuck                                                                                                                  |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -44,17 +45,20 @@
 | 44 Pedal Hi-hat   | .                                                                                                                          |
 | 55 Splash Cymbal  | ,                                                                                                                          |
 | 49 Crash Cymbal 1 | [                                                                                                                          |
-| 52 Chinese Cymbal | ] |
+| 52 Chinese Cymbal | ]																															 |
 
-##### Ограничения на события NoteOn #####
+##### Restrictions on NoteOn #####
 
-Главное ограничение при размещении событий на используемом канале - отличное для каждого абсолютное время начала. Интерпретатор выполняет команды, отсортировав их за этим показателем. Поэтому, в случае равенства абсолютного времени, может возникнуть неопределенное поведение программы.
-Ограничений на другие параметры события - ускорение, громкость - нет. Также отсутствуют ограничения на информацию на других каналах файла .mid.
-Все вышеперечисленное позволяет использовать диалект для стеганографии.
+The main limitation when placing events on the channel is an unique absolute start time for each. The interpreter executes commands, sorting them out by this indicator. Therefore, in the case of the equality of absolute time, there can be an undefined behavior of the program.
 
-#### Содержание репозитория ####
+There are no restrictions on other parameters of event. Also there are no restrictions on information on other channels of the .mid file.
 
-**Badadoom** - интерпретатор диалекта.
-**Badadoom to BF** - конвертер программы на диалекте в классический Brainfuck.
-**BF to Badadoom** - конвертер программы, написанной на Brainfuck, в валидную для интерпретатора .mid.
-**Examples** - примеры некоторых программ, написанных на диалекте.
+#### Repository Content ####
+
+**Badadoom** - interpreter.
+
+**Badadoom to BF** - converter for Badadoom midi in Brainfuck source code.
+
+**BF to Badadoom** - converter for Brainfuck source code to Badadoom midi.
+
+**Examples** - examples of pure Badadoom midi files.
