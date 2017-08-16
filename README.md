@@ -61,4 +61,4 @@ There are no restrictions on other parameters of event. Also there are no restri
 
 **BF to Badadoom** - converter for Brainfuck source code to Badadoom midi.
 
-**Examples** - examples of pure Badadoom midi files.
+**Examples** - examples of pure Badadoom midi files. **2017 update**: [listen examples on SoundCloud](https://soundcloud.com/brainfuck-drums/sets/brainfuck-with-drums)
